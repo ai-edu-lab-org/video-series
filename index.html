@@ -4,17 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI for Educators — A Video Series by Ben Shapiro & Edwin Zhao</title>
-<meta name="description" content="An accessible video series, designed for students and educators at education schools, surveying how AI tools and developments are reshaping work and education.">
+<meta name="description" content="A video series designed for students and educators at education schools, surveying AI tools, developments, and their ethical implications.">
 <meta property="og:title" content="AI for Educators — A Video Series">
-<meta property="og:description" content="An accessible video series, designed for students and educators at education schools, surveying how AI tools and developments are reshaping work and education.">
+<meta property="og:description" content="A video series designed for students and educators at education schools, surveying AI tools, developments, and their ethical implications.">
 <meta property="og:type" content="website">
 <!-- <meta property="og:image" content="TODO: add image URL"> -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="AI for Educators — A Video Series">
-<meta name="twitter:description" content="An accessible video series, designed for students and educators at education schools, surveying how AI tools and developments are reshaping work and education.">
+<meta name="twitter:description" content="A video series designed for students and educators at education schools, surveying AI tools, developments, and their ethical implications.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://www.youtube.com">
+<link rel="preconnect" href="https://i.ytimg.com">
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,300;1,6..72,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -98,7 +100,7 @@
 
   .landing-byline {
     font-family: var(--font-sans);
-    font-size: clamp(0.85rem, 1.5vw, 1.05rem);
+    font-size: clamp(1rem, 1.7vw, 1.2rem);
     font-weight: 400;
     color: var(--color-accent);
     letter-spacing: 0.02em;
@@ -107,7 +109,7 @@
   }
 
   .landing-description {
-    font-size: clamp(1rem, 1.4vw, 1.15rem);
+    font-size: clamp(1.15rem, 1.6vw, 1.3rem);
     font-weight: 300;
     line-height: 1.8;
     color: var(--color-text-secondary);
@@ -484,18 +486,18 @@
   }
 
   .toc-backdrop {
-    display: none;
     position: fixed;
     inset: 0;
     background: rgba(0,0,0,0.2);
     z-index: 998;
     opacity: 0;
+    pointer-events: none;
     transition: opacity 0.3s ease;
   }
 
   .toc-backdrop.visible {
-    display: block;
     opacity: 1;
+    pointer-events: auto;
   }
 
   @media (max-width: 900px) {
@@ -576,7 +578,7 @@
   <h1 class="landing-title">AI for <em>Educators</em></h1>
   <div class="landing-byline">A video series by Ben Shapiro &amp; Edwin Zhao</div>
   <p class="landing-description">
-    An accessible video series, designed for students and educators at education schools, surveying how AI tools and developments are reshaping work and education. Videos cover topics including concepts like context engineering, how to use new agentic AI tools, and the significant ethical, security, and privacy considerations that come with them. The series concludes by discussing what more sociocultural and ethical AI for education could look like.
+    A video series designed for students and educators at education schools, surveying AI tools, developments, and their ethical implications. Videos cover topics including concepts like context engineering, how to use new agentic AI tools, and the significant ethical, security, and privacy considerations that come with them. The series concludes by discussing what more sociocultural and ethical AI for education could look like.
   </p>
   <button class="landing-start" id="startBtn">
     Start watching
@@ -599,9 +601,9 @@
       <li><a class="toc-link" href="#video-7" data-video="video-7"><span class="toc-num">7</span><span class="toc-text">Sociocultural &amp; Ethical AI</span></a></li>
     </ol>
     <div class="panel-left-footer">
-      <a href="#">About</a>
-      <a href="#">Contact</a>
-      <a href="#">YouTube</a>
+      <a href="#" id="aboutLink">About</a>
+      <a href="mailto:bshapiro@gsu.edu">Contact</a>
+      <a href="https://www.youtube.com/playlist?list=PLcNcQ_ciEht7m35pWRqXKl8_1m3ByyUqK" target="_blank" rel="noopener noreferrer">YouTube</a>
     </div>
   </nav>
 
@@ -734,20 +736,30 @@
   const tocBackdrop = document.getElementById('tocBackdrop');
   const landing = document.getElementById('landing');
   const page = document.getElementById('page');
+  const panelRight = document.querySelector('.panel-right');
 
   let launched = false;
   let activeSection = document.querySelector('.video-section.active');
   let activeLink = document.querySelector('.toc-link.active');
 
   function loadIframe(section) {
-    const iframe = section.querySelector('iframe[data-src]');
+    const iframe = section.querySelector('iframe');
     if (!iframe) return;
-    iframe.src = iframe.dataset.src;
+    const src = iframe.dataset.src;
+    if (!src) return;
+    iframe.src = src;
     iframe.removeAttribute('data-src');
     iframe.addEventListener('load', () => {
       const placeholder = section.querySelector('.video-embed-placeholder');
       if (placeholder) placeholder.remove();
     }, { once: true });
+  }
+
+  function unloadIframe(section) {
+    const iframe = section.querySelector('iframe');
+    if (!iframe || iframe.dataset.src) return;
+    iframe.dataset.src = iframe.src;
+    iframe.removeAttribute('src');
   }
 
   function launch(targetId) {
@@ -762,9 +774,12 @@
 
     landing.classList.add('fade-out');
     page.classList.add('visible');
-    landing.addEventListener('transitionend', () => {
-      landing.classList.add('hidden');
-    }, { once: true });
+
+    const onEnd = () => { landing.classList.add('hidden'); };
+    landing.addEventListener('transitionend', onEnd, { once: true });
+    setTimeout(() => {
+      if (!landing.classList.contains('hidden')) onEnd();
+    }, 600);
 
     if (!window.location.hash) {
       history.replaceState(null, '', '#' + (targetId || 'video-1'));
@@ -773,12 +788,18 @@
 
   function goHome() {
     launched = false;
-    landing.classList.remove('hidden', 'fade-out');
+    unloadIframe(activeSection);
+    landing.classList.remove('hidden');
+    void landing.offsetHeight;
+    landing.classList.remove('fade-out');
     page.classList.remove('visible');
     history.pushState(null, '', window.location.pathname);
   }
 
   function showVideo(id, pushState) {
+    if (activeSection.id === id) return;
+    const prevSection = activeSection;
+
     activeSection.classList.remove('active');
     activeLink.classList.remove('active');
     activeLink.removeAttribute('aria-current');
@@ -790,7 +811,11 @@
     activeLink.classList.add('active');
     activeLink.setAttribute('aria-current', 'true');
 
+    unloadIframe(prevSection);
     loadIframe(activeSection);
+
+    panelRight.scrollTo(0, 0);
+    window.scrollTo(0, 0);
 
     if (pushState !== false) {
       history.pushState(null, '', '#' + id);
@@ -799,9 +824,11 @@
 
   document.getElementById('startBtn').addEventListener('click', () => launch('video-1'));
 
-  document.getElementById('homeLink').addEventListener('click', (e) => {
-    e.preventDefault();
-    goHome();
+  ['homeLink', 'aboutLink'].forEach(id => {
+    document.getElementById(id).addEventListener('click', (e) => {
+      e.preventDefault();
+      goHome();
+    });
   });
 
   tocLinks.forEach(link => {
@@ -837,6 +864,8 @@
     if (hash && document.getElementById(hash)) {
       if (!launched) launch(hash);
       else showVideo(hash, false);
+    } else if (!hash && launched) {
+      goHome();
     }
   }
 
