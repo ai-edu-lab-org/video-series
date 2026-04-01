@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI for Educators — A Video Series by Ben Shapiro & Edwin Zhao</title>
+<meta name="description" content="An accessible video series, designed for students and educators at education schools, surveying how AI tools and developments are reshaping work and education.">
+<meta property="og:title" content="AI for Educators — A Video Series">
+<meta property="og:description" content="An accessible video series, designed for students and educators at education schools, surveying how AI tools and developments are reshaping work and education.">
+<meta property="og:type" content="website">
+<!-- <meta property="og:image" content="TODO: add image URL"> -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AI for Educators — A Video Series">
+<meta name="twitter:description" content="An accessible video series, designed for students and educators at education schools, surveying how AI tools and developments are reshaping work and education.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,300;1,6..72,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-bg: #FAF8F5;
+    --color-bg-warm: #F5F1EB;
+    --color-text: #2C2825;
+    --color-text-secondary: #6B6560;
+    --color-text-tertiary: #9B9590;
+    --color-accent: #C8942A;
+    --color-accent-light: #E8D5A8;
+    --color-accent-faint: #F5EDD8;
+    --color-blue: #4A6B8A;
+    --color-border: #E5E0DA;
+    --color-card: #FFFFFF;
+    --font-serif: 'Newsreader', Georgia, 'Times New Roman', serif;
+    --font-sans: 'DM Sans', -apple-system, sans-serif;
+    --panel-width: min(400px, 35vw);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html {
+    font-size: 17px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    font-family: var(--font-serif);
+    background: var(--color-bg);
+    color: var(--color-text);
+    line-height: 1.7;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .landing {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-bg);
+    transition: opacity 0.5s ease;
+  }
+
+  .landing.fade-out {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .landing.hidden {
+    display: none;
+  }
+
+  .landing-title {
+    font-family: var(--font-serif);
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    font-weight: 400;
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+    color: var(--color-text);
+    text-align: center;
+  }
+
+  .landing-title em {
+    font-style: italic;
+    color: var(--color-blue);
+  }
+
+  .landing-byline {
+    font-family: var(--font-sans);
+    font-size: clamp(0.85rem, 1.5vw, 1.05rem);
+    font-weight: 400;
+    color: var(--color-accent);
+    letter-spacing: 0.02em;
+    margin-top: 0.6rem;
+    text-align: center;
+  }
+
+  .landing-description {
+    font-size: clamp(1rem, 1.4vw, 1.15rem);
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--color-text-secondary);
+    max-width: 740px;
+    text-align: left;
+    margin-top: 2rem;
+  }
+
+  .landing-start {
+    margin-top: 2.5rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.8rem 2rem;
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--color-card);
+    background: var(--color-blue);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  .landing-start:hover {
+    background: #3d5b77;
+    transform: translateY(-1px);
+  }
+
+  .landing-start:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 4px;
+  }
+
+  .landing-start svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .page {
+    display: grid;
+    grid-template-columns: var(--panel-width) 1fr;
+    height: 100vh;
+    opacity: 0;
+    transition: opacity 0.6s ease 0.3s;
+  }
+
+  .page.visible {
+    opacity: 1;
+  }
+
+  .panel-left {
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--color-border);
+    background: var(--color-bg-warm);
+    padding: 2.5rem;
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+
+  .panel-left::-webkit-scrollbar { display: none; }
+
+  .series-title {
+    font-family: var(--font-serif);
+    font-size: clamp(1.8rem, 3vw, 2.4rem);
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--color-text);
+    margin-bottom: 0.3rem;
+  }
+
+  .series-title em {
+    font-style: italic;
+    color: var(--color-blue);
+  }
+
+  .home-link {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s ease;
+    cursor: pointer;
+  }
+
+  .home-link:hover {
+    color: var(--color-blue);
+  }
+
+  .home-link em {
+    color: var(--color-blue);
+  }
+
+  .series-byline {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: var(--color-accent);
+    letter-spacing: 0.02em;
+    margin-bottom: 1.5rem;
+  }
+
+  .toc-title {
+    font-family: var(--font-sans);
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-text-tertiary);
+    margin-bottom: 1rem;
+  }
+
+  .toc-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .toc-link {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    padding: 0.6rem 0.8rem;
+    text-decoration: none;
+    color: var(--color-text-secondary);
+    font-family: var(--font-sans);
+    font-size: 0.88rem;
+    font-weight: 400;
+    line-height: 1.4;
+    border-radius: 6px;
+    transition: all 0.25s ease;
+    cursor: pointer;
+  }
+
+  .toc-link:hover {
+    background: rgba(0,0,0,0.04);
+    color: var(--color-text);
+  }
+
+  .toc-link:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .toc-link.active {
+    color: var(--color-text);
+    font-weight: 500;
+    background: var(--color-accent-faint);
+  }
+
+  .toc-num {
+    font-family: var(--font-serif);
+    font-size: 0.88rem;
+    color: var(--color-text-tertiary);
+    font-weight: 400;
+    min-width: 1.2rem;
+    flex-shrink: 0;
+  }
+
+  .toc-link.active .toc-num {
+    color: var(--color-accent);
+  }
+
+  .toc-text { flex: 1; }
+
+  .panel-left-footer {
+    margin-top: auto;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-border);
+    font-family: var(--font-sans);
+    font-size: 0.65rem;
+    color: var(--color-text-tertiary);
+    display: flex;
+    gap: 1.2rem;
+  }
+
+  .panel-left-footer a {
+    color: var(--color-text-tertiary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .panel-left-footer a:hover {
+    color: var(--color-accent);
+  }
+
+  .panel-right {
+    display: flex;
+    flex-direction: column;
+    padding: 2.5rem 3rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .video-section {
+    display: none;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .video-section.active {
+    display: flex;
+  }
+
+  .video-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+    flex-shrink: 0;
+  }
+
+  .video-number {
+    font-family: var(--font-serif);
+    font-size: 2.8rem;
+    font-weight: 300;
+    line-height: 1;
+    color: var(--color-accent-light);
+    -webkit-text-stroke: 1px var(--color-accent-light);
+    user-select: none;
+  }
+
+  .video-title {
+    font-family: var(--font-serif);
+    font-size: 1.3rem;
+    font-weight: 500;
+    line-height: 1.3;
+    color: var(--color-text);
+    letter-spacing: -0.01em;
+  }
+
+  .video-embed {
+    position: relative;
+    width: 100%;
+    flex: 1;
+    min-height: 0;
+    background: var(--color-bg-warm);
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+  }
+
+  .video-embed iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  .video-embed-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 0.8rem;
+    color: var(--color-text-tertiary);
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    pointer-events: none;
+  }
+
+  .video-embed-placeholder svg {
+    width: 48px;
+    height: 48px;
+    fill: none;
+    stroke: var(--color-accent-light);
+    stroke-width: 1.5;
+  }
+
+  .video-description {
+    font-size: 0.88rem;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--color-text-secondary);
+    margin-bottom: 1.2rem;
+    flex-shrink: 0;
+  }
+
+  .video-nav {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.4rem;
+    flex-shrink: 0;
+    align-items: center;
+    margin-top: 1.2rem;
+  }
+
+  .video-nav-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    color: var(--color-text-secondary);
+    background: none;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .video-nav-btn:hover {
+    background: var(--color-bg-warm);
+    color: var(--color-text);
+    border-color: var(--color-accent-light);
+  }
+
+  .video-nav-btn:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .video-nav-btn.hidden {
+    visibility: hidden;
+  }
+
+  .video-nav-btn svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .mobile-toc-toggle {
+    display: none;
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    cursor: pointer;
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+
+  .mobile-toc-toggle svg {
+    width: 20px;
+    height: 20px;
+    stroke: var(--color-text-secondary);
+    fill: none;
+    stroke-width: 2;
+  }
+
+  .mobile-toc-toggle:hover {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+
+  .mobile-toc-toggle:hover svg { stroke: white; }
+
+  .mobile-toc-toggle:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .toc-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.2);
+    z-index: 998;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .toc-backdrop.visible {
+    display: block;
+    opacity: 1;
+  }
+
+  @media (max-width: 900px) {
+    body { overflow: auto; height: auto; }
+
+    .landing-title { font-size: clamp(2.4rem, 10vw, 3.5rem); }
+
+    .page {
+      grid-template-columns: 1fr;
+      height: auto;
+    }
+
+    .panel-left {
+      position: fixed;
+      top: auto;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: auto;
+      max-height: 70vh;
+      border-right: none;
+      border-top: 1px solid var(--color-border);
+      background: var(--color-card);
+      z-index: 999;
+      padding: 1.5rem;
+      transform: translateY(100%);
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 -8px 40px rgba(0,0,0,0.1);
+      border-radius: 16px 16px 0 0;
+    }
+
+    .panel-left.open { transform: translateY(0); }
+
+    .panel-left-footer { display: none; }
+    .mobile-toc-toggle { display: flex; }
+
+    .panel-right {
+      padding: 1.5rem;
+      min-height: 100vh;
+    }
+
+    .video-embed {
+      aspect-ratio: 16/9;
+      flex: none;
+    }
+
+    .video-number { font-size: 2.2rem; }
+    .video-title { font-size: 1.1rem; }
+  }
+
+  @media (max-width: 500px) {
+    html { font-size: 16px; }
+    .video-header { flex-direction: column; gap: 0.3rem; }
+  }
+
+  .skip-link {
+    position: absolute;
+    top: -100%;
+    left: 1rem;
+    padding: 0.5rem 1rem;
+    background: var(--color-blue);
+    color: white;
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    border-radius: 0 0 6px 6px;
+    z-index: 10000;
+    text-decoration: none;
+  }
+
+  .skip-link:focus { top: 0; }
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main-content">Skip to content</a>
+
+<div class="landing" id="landing">
+  <h1 class="landing-title">AI for <em>Educators</em></h1>
+  <div class="landing-byline">A video series by Ben Shapiro &amp; Edwin Zhao</div>
+  <p class="landing-description">
+    An accessible video series, designed for students and educators at education schools, surveying how AI tools and developments are reshaping work and education. Videos cover topics including concepts like context engineering, how to use new agentic AI tools, and the significant ethical, security, and privacy considerations that come with them. The series concludes by discussing what more sociocultural and ethical AI for education could look like.
+  </p>
+  <button class="landing-start" id="startBtn">
+    Start watching
+    <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+  </button>
+</div>
+
+<div class="page" id="page">
+  <nav class="panel-left" id="sidebar" aria-label="Video series navigation">
+    <h1 class="series-title"><a href="#" id="homeLink" class="home-link">AI for <em>Educators</em></a></h1>
+    <div class="series-byline">A video series by Ben Shapiro &amp; Edwin Zhao</div>
+    <div class="toc-title" id="toc-label">Videos</div>
+    <ol class="toc-list" role="list" aria-labelledby="toc-label">
+      <li><a class="toc-link active" href="#video-1" data-video="video-1" aria-current="true"><span class="toc-num">1</span><span class="toc-text">3 Levels of AI</span></a></li>
+      <li><a class="toc-link" href="#video-2" data-video="video-2"><span class="toc-num">2</span><span class="toc-text">10 Things About How AI Works</span></a></li>
+      <li><a class="toc-link" href="#video-3" data-video="video-3"><span class="toc-num">3</span><span class="toc-text">AI Tools for Educators</span></a></li>
+      <li><a class="toc-link" href="#video-4" data-video="video-4"><span class="toc-num">4</span><span class="toc-text">Teach Your AI to Do More</span></a></li>
+      <li><a class="toc-link" href="#video-5" data-video="video-5"><span class="toc-num">5</span><span class="toc-text">From Tool to Teammate</span></a></li>
+      <li><a class="toc-link" href="#video-6" data-video="video-6"><span class="toc-num">6</span><span class="toc-text">Writing With &amp; Without AI</span></a></li>
+      <li><a class="toc-link" href="#video-7" data-video="video-7"><span class="toc-num">7</span><span class="toc-text">Sociocultural &amp; Ethical AI</span></a></li>
+    </ol>
+    <div class="panel-left-footer">
+      <a href="#">About</a>
+      <a href="#">Contact</a>
+      <a href="#">YouTube</a>
+    </div>
+  </nav>
+
+  <main class="panel-right" id="main-content">
+
+    <section class="video-section active" id="video-1" aria-label="Video 1">
+      <div class="video-header">
+        <div class="video-number" aria-hidden="true">01</div>
+        <h2 class="video-title">Beyond the Chatbot: 3 Levels of AI Reshaping Work, Ethics, and Privacy</h2>
+      </div>
+      <p class="video-description">Overview of some recent developments in AI that are reshaping work, ethics, and privacy. We explore Anthropic's Claude AI tools, including Claude Chat, Claude CoWork, and Claude Code, and what they mean for educators and working professionals.</p>
+      <div class="video-embed">
+        <div class="video-embed-placeholder"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg><span>Loading video…</span></div>
+        <iframe data-src="https://www.youtube.com/embed/2R7EJr2w9XM" title="Beyond the Chatbot: 3 Levels of AI Reshaping Work, Ethics, and Privacy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+      </div>
+      <div class="video-nav">
+        <button class="video-nav-btn hidden" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <button class="video-nav-btn" data-next="video-2" aria-label="Next video"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+      </div>
+    </section>
+
+    <section class="video-section" id="video-2" aria-label="Video 2">
+      <div class="video-header">
+        <div class="video-number" aria-hidden="true">02</div>
+        <h2 class="video-title">10 Things Educators Should Know About How AI Works</h2>
+      </div>
+      <p class="video-description">An interview and discussion with software developer and educator Edwin Zhao on 10 things valuable for educators to know about how AI works to empower educators to critique or use AI in their own work.</p>
+      <div class="video-embed">
+        <div class="video-embed-placeholder"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg><span>Loading video…</span></div>
+        <iframe data-src="https://www.youtube.com/embed/e0hIkGKggmo" title="10 Things Educators Should Know About How AI Works" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+      </div>
+      <div class="video-nav">
+        <button class="video-nav-btn" data-prev="video-1" aria-label="Previous video"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <button class="video-nav-btn" data-next="video-3" aria-label="Next video"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+      </div>
+    </section>
+
+    <section class="video-section" id="video-3" aria-label="Video 3">
+      <div class="video-header">
+        <div class="video-number" aria-hidden="true">03</div>
+        <h2 class="video-title">AI Tools for Educators: Antigravity, VS Code, Cursor</h2>
+      </div>
+      <p class="video-description">A walkthrough of new and emerging AI tools like Google AntiGravity, Claude, Cursor, and VS Code to show what's possible for educators and professionals, plus how to think critically about permissions, ethics, and responsible use.</p>
+      <div class="video-embed">
+        <div class="video-embed-placeholder"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg><span>Loading video…</span></div>
+        <iframe data-src="https://www.youtube.com/embed/1ec5Xul9__U" title="AI Tools for Educators: Antigravity, VS Code, Cursor" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+      </div>
+      <div class="video-nav">
+        <button class="video-nav-btn" data-prev="video-2" aria-label="Previous video"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <button class="video-nav-btn" data-next="video-4" aria-label="Next video"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+      </div>
+    </section>
+
+    <section class="video-section" id="video-4" aria-label="Video 4">
+      <div class="video-header">
+        <div class="video-number" aria-hidden="true">04</div>
+        <h2 class="video-title">AI Skills for Educators: Teach Your AI to Do More</h2>
+      </div>
+      <p class="video-description">What are AI skills and how can educators use them? In this video, Edwin walks through creating, using, and sharing custom skills to build and redesign a STEAM summer camp website.</p>
+      <div class="video-embed">
+        <div class="video-embed-placeholder"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg><span>Loading video…</span></div>
+        <iframe data-src="https://www.youtube.com/embed/Lp5g2eF3BMc" title="AI Skills for Educators: Teach Your AI to Do More" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+      </div>
+      <div class="video-nav">
+        <button class="video-nav-btn" data-prev="video-3" aria-label="Previous video"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <button class="video-nav-btn" data-next="video-5" aria-label="Next video"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+      </div>
+    </section>
+
+    <section class="video-section" id="video-5" aria-label="Video 5">
+      <div class="video-header">
+        <div class="video-number" aria-hidden="true">05</div>
+        <h2 class="video-title">AI Agents for Educators: From Tool to Teammate</h2>
+      </div>
+      <p class="video-description">What happens when AI goes beyond following instructions and starts making decisions? In this video, Edwin breaks down what AI agents are and shows you how to create and use them to build, refine, and iterate on projects.</p>
+      <div class="video-embed">
+        <div class="video-embed-placeholder"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg><span>Loading video…</span></div>
+        <iframe data-src="https://www.youtube.com/embed/W9ab4m9Csfc" title="AI Agents for Educators: From Tool to Teammate" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+      </div>
+      <div class="video-nav">
+        <button class="video-nav-btn" data-prev="video-4" aria-label="Previous video"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <button class="video-nav-btn" data-next="video-6" aria-label="Next video"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+      </div>
+    </section>
+
+    <section class="video-section" id="video-6" aria-label="Video 6">
+      <div class="video-header">
+        <div class="video-number" aria-hidden="true">06</div>
+        <h2 class="video-title">What Writing With and Without AI Looks Like</h2>
+      </div>
+      <p class="video-description">What does it mean to be a writer in the age of AI, especially if you're a student or faculty? In this video, I trace the full life of an academic paper written without AI, from initial idea to publication. Then, I rewrite the paper with AI, using it in progressively more intense ways: beginning with prompting, shifting to context, building writing and reviewing agents, and then using them to iteratively develop the paper for a particular journal. I also walk through my own identity as a writer and close by reflecting on what's really at stake, learning, meaning, and identity, along with general principles for thinking about writing with and without AI.</p>
+      <div class="video-embed">
+        <div class="video-embed-placeholder"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg><span>Loading video…</span></div>
+        <iframe data-src="https://www.youtube.com/embed/x5HcD2FK2Ms" title="What Writing With and Without AI Looks Like" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+      </div>
+      <div class="video-nav">
+        <button class="video-nav-btn" data-prev="video-5" aria-label="Previous video"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <button class="video-nav-btn" data-next="video-7" aria-label="Next video"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+      </div>
+    </section>
+
+    <section class="video-section" id="video-7" aria-label="Video 7">
+      <div class="video-header">
+        <div class="video-number" aria-hidden="true">07</div>
+        <h2 class="video-title">Towards More Sociocultural and Ethical AI for Education?</h2>
+      </div>
+      <p class="video-description">Most AI tools and frameworks are designed for one person talking to one machine (an "AI assistant"). But learning is social, cultural, and shaped by identity and relationships. In this video, I draw on the work of Rumman Chowdhury, Jean Lave, and Na'ilah Suad Nasir to frame what sociocultural and ethical AI for education could look like, highlighting five projects that illustrate possibilities for sociocultural and ethical AI: the Atlanta Interdisciplinary AI Network, Community Builder (CoBi), AI + Planetary Justice Alliance, Abundant Intelligences, and Co-ML by Apple.</p>
+      <div class="video-embed">
+        <div class="video-embed-placeholder"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg><span>Loading video…</span></div>
+        <iframe data-src="https://www.youtube.com/embed/g-qgJre0P6s" title="Towards More Sociocultural and Ethical AI for Education?" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+      </div>
+      <div class="video-nav">
+        <button class="video-nav-btn" data-prev="video-6" aria-label="Previous video"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <button class="video-nav-btn hidden" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<button class="mobile-toc-toggle" id="tocToggle" aria-label="Open table of contents">
+  <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="15" y2="12"/><line x1="3" y1="18" x2="10" y2="18"/></svg>
+</button>
+<div class="toc-backdrop" id="tocBackdrop"></div>
+
+<script>
+  const tocLinks = document.querySelectorAll('.toc-link');
+  const sidebar = document.getElementById('sidebar');
+  const tocToggle = document.getElementById('tocToggle');
+  const tocBackdrop = document.getElementById('tocBackdrop');
+  const landing = document.getElementById('landing');
+  const page = document.getElementById('page');
+
+  let launched = false;
+  let activeSection = document.querySelector('.video-section.active');
+  let activeLink = document.querySelector('.toc-link.active');
+
+  function loadIframe(section) {
+    const iframe = section.querySelector('iframe[data-src]');
+    if (!iframe) return;
+    iframe.src = iframe.dataset.src;
+    iframe.removeAttribute('data-src');
+    iframe.addEventListener('load', () => {
+      const placeholder = section.querySelector('.video-embed-placeholder');
+      if (placeholder) placeholder.remove();
+    }, { once: true });
+  }
+
+  function launch(targetId) {
+    if (launched) return;
+    launched = true;
+
+    if (targetId && targetId !== 'video-1') {
+      showVideo(targetId, false);
+    }
+
+    loadIframe(activeSection);
+
+    landing.classList.add('fade-out');
+    page.classList.add('visible');
+    landing.addEventListener('transitionend', () => {
+      landing.classList.add('hidden');
+    }, { once: true });
+
+    if (!window.location.hash) {
+      history.replaceState(null, '', '#' + (targetId || 'video-1'));
+    }
+  }
+
+  function goHome() {
+    launched = false;
+    landing.classList.remove('hidden', 'fade-out');
+    page.classList.remove('visible');
+    history.pushState(null, '', window.location.pathname);
+  }
+
+  function showVideo(id, pushState) {
+    activeSection.classList.remove('active');
+    activeLink.classList.remove('active');
+    activeLink.removeAttribute('aria-current');
+
+    activeSection = document.getElementById(id);
+    activeSection.classList.add('active');
+
+    activeLink = document.querySelector(`[data-video="${id}"]`);
+    activeLink.classList.add('active');
+    activeLink.setAttribute('aria-current', 'true');
+
+    loadIframe(activeSection);
+
+    if (pushState !== false) {
+      history.pushState(null, '', '#' + id);
+    }
+  }
+
+  document.getElementById('startBtn').addEventListener('click', () => launch('video-1'));
+
+  document.getElementById('homeLink').addEventListener('click', (e) => {
+    e.preventDefault();
+    goHome();
+  });
+
+  tocLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (!launched) launch(link.dataset.video);
+      else showVideo(link.dataset.video);
+      closeToc();
+    });
+  });
+
+  document.querySelectorAll('.video-nav-btn[data-prev], .video-nav-btn[data-next]').forEach(btn => {
+    btn.addEventListener('click', () => showVideo(btn.dataset.prev || btn.dataset.next));
+  });
+
+  function closeToc() {
+    sidebar.classList.remove('open');
+    tocBackdrop.classList.remove('visible');
+    tocToggle.setAttribute('aria-label', 'Open table of contents');
+  }
+
+  tocToggle.addEventListener('click', () => {
+    const isOpen = sidebar.classList.toggle('open');
+    tocBackdrop.classList.toggle('visible', isOpen);
+    tocToggle.setAttribute('aria-label',
+      isOpen ? 'Close table of contents' : 'Open table of contents');
+  });
+
+  tocBackdrop.addEventListener('click', closeToc);
+
+  function handleHash() {
+    const hash = window.location.hash.replace('#', '');
+    if (hash && document.getElementById(hash)) {
+      if (!launched) launch(hash);
+      else showVideo(hash, false);
+    }
+  }
+
+  window.addEventListener('popstate', handleHash);
+  if (window.location.hash) handleHash();
+</script>
+
+</body>
+</html>
